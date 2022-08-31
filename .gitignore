@@ -1,0 +1,13 @@
+# Python
+*.pyc
+
+# TeX
+*.aux
+*.dvi
+*.log
+*.svg
+*.tex
+
+# Miscellaneous
+*.txt
+*.mp4
