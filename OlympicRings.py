@@ -9,7 +9,7 @@ class Rings(Scene):
     voffset = 0.5 # Vertical offset of the rings
 
     # Create circles and move them into position
-    blue_ring = Circle().shift(UP*voffset, LEFT*2.3)
+    blue_ring = Circle(color=BLUE).shift(UP*voffset, LEFT*2.3)
     black_ring = Circle().shift(UP*voffset)
     red_ring = Circle().shift(UP*voffset, RIGHT*2.3)
 
@@ -25,6 +25,9 @@ class Rings(Scene):
     yellow_ring.set_stroke(color=YELLOW, width=wdth)
     green_ring.set_stroke(color=GREEN, width=wdth)
 
+    title = Text("Olympic Flag", color=BLACK).scale(1).to_edge(DOWN, buff=0.5)
+
+    # Animate it
     self.play(Create(blue_ring), Create(black_ring), Create(red_ring),
-              Create(yellow_ring), Create(green_ring))
+              Create(yellow_ring), Create(green_ring), Write(title))
     self.wait(1)
