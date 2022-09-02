@@ -11,3 +11,7 @@
 # Miscellaneous
 *.txt
 *.mp4
+*.png
+
+# vscode
+*.json
