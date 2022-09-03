@@ -466,4 +466,5 @@ class MapDerivatives(Scene):
 
     self.wait() # Hold the animation to stop it looping so soon
 
-    # Show that the sin derivatives are circular
+    # Make perfect loop
+    # Add label showing gradient of tangent and height of dot on RHS
