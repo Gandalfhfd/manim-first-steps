@@ -129,70 +129,341 @@ class UpdaterGraphing(Scene):
 class MapDerivatives(Scene):
   def construct(self):
 
-    # Moves smoothly from -4 to wherever we choose.
-    k = ValueTracker(-4)
+    x0 = -PI # Start value
+    x1 = PI # End value
 
+    # Moves smoothly from x0 to wherever we choose.
+    k = ValueTracker(x0)
+
+
+    ## AXES
     # Cartesian coordinate axes
-    ax1 = (
-      Axes(x_range=[-4,4,2], y_range=[-1,1,0.5], x_length=6, y_length=6)
+    ax0 = (
+      Axes(x_range=[x0,x1,2], y_range=[-1,1,0.5], x_length=6, y_length=6)
       .to_edge(LEFT)
       # .add_coordinates()
       .set_color(WHITE)
     )
 
     # Cartesian coordinate axes
-    ax2 = (
-      Axes(x_range=[-4,4,2], y_range=[-1,1,0.5], x_length=6, y_length=6)
+    ax1 = (
+      Axes(x_range=[x0,x1,2], y_range=[-1,1,0.5], x_length=6, y_length=6)
       .to_edge(RIGHT)
       # .add_coordinates()
       .set_color(WHITE)
     )
 
+    # Cartesian coordinate axes
+    ax2 = (
+      Axes(x_range=[x0,x1,2], y_range=[-1,1,0.5], x_length=6, y_length=6)
+      .to_edge(RIGHT)
+      # .add_coordinates()
+      .set_color(WHITE)
+    )
+
+    # Cartesian coordinate axes
+    ax3 = (
+      Axes(x_range=[x0,x1,2], y_range=[-1,1,0.5], x_length=6, y_length=6)
+      .to_edge(RIGHT)
+      # .add_coordinates()
+      .set_color(WHITE)
+    )
+
+    # Cartesian coordinate axes
+    ax4 = (
+      Axes(x_range=[x0,x1,2], y_range=[-1,1,0.5], x_length=6, y_length=6)
+      .to_edge(RIGHT)
+      # .add_coordinates()
+      .set_color(WHITE)
+    )
+
+    ## FUNCTIONS
     # Function we wish to take the derivative of
-    func = ax1.plot(lambda x: sin(x), x_range=[-4,4], color=BLUE)
+    func = ax0.plot(lambda x: sin(x), x_range=[x0,x1], color=BLUE)
 
-    # Derivative function
-    deriv = ax2.plot(lambda x: sin(PI/2-x), x_range=[-4,4], color=YELLOW)
+    # First derivative function
+    deriv1 = ax1.plot(lambda x: sin(PI/2-x), x_range=[x0,x1], color=YELLOW)
 
+    # Second derivative function
+    deriv2 = ax2.plot(lambda x: -sin(x), x_range=[x0,x1], color=YELLOW)
+
+    # Third derivative function
+    deriv3 = ax3.plot(lambda x: -sin(PI/2-x), x_range=[x0,x1], color=YELLOW)
+
+    # Fourth derivative function
+    deriv4 = ax4.plot(lambda x: sin(x), x_range=[x0,x1], color=YELLOW)
+
+
+    ## TANGENT LINES
     # Tangent line to the function
-    tangent = always_redraw( # Keep it updated
-      lambda: ax1.get_secant_slope_group( # Find the tangent to ax1 contents
+    tangent0 = always_redraw( # Keep it updated
+      lambda: ax0.get_secant_slope_group( # Find a tangent and put it on ax0
         x=k.get_value(), # vary x based on value of k
-        graph=func, # the specific function on ax1 we're interested in
+        graph=func, # the specific function we're interested in
         dx=0.01, # precision of the tangent line
-        secant_line_color=PURE_GREEN,
-        secant_line_length=2,
+        secant_line_color=YELLOW,
+        secant_line_length=1,
       )
     )
 
-    # Point showing where the tangent line is
-    pt1 = always_redraw(
+    # Tangent line to the first derivative
+    tangent1 = always_redraw( # Keep it updated
+      lambda: ax1.get_secant_slope_group( # Find a tangent and put it on ax1
+        x=k.get_value(), # vary x based on value of k
+        graph=deriv1, # the specific function  we're interested in
+        dx=0.01, # precision of the tangent line
+        secant_line_color=YELLOW,
+        secant_line_length=1,
+      )
+    )
+
+    # Tangent line to the second derivative
+    tangent2 = always_redraw( # Keep it updated
+      lambda: ax2.get_secant_slope_group( # Find a tangent and put it on ax2
+        x=k.get_value(), # vary x based on value of k
+        graph=deriv2, # the specific function we're interested in
+        dx=0.01, # precision of the tangent line
+        secant_line_color=YELLOW,
+        secant_line_length=1,
+      )
+    )
+
+    # Tangent line to the third derivative
+    tangent3 = always_redraw( # Keep it updated
+      lambda: ax3.get_secant_slope_group( # Find a tangent and put it on ax3
+        x=k.get_value(), # vary x based on value of k
+        graph=deriv3, # the specific function we're interested in
+        dx=0.01, # precision of the tangent line
+        secant_line_color=YELLOW,
+        secant_line_length=1,
+      )
+    )
+
+
+    ## POINTS
+    # Point showing where the 1st tangent line is
+    pt0 = always_redraw(
         lambda: Dot(color=RED).move_to(
-          ax1.c2p(k.get_value(), func.underlying_function(k.get_value()))
+          ax0.c2p(k.get_value(), func.underlying_function(k.get_value()))
         )
     )
 
-    # Point "drawing" the derivative
-    pt2 = always_redraw(
+    # Point showing where the 2nd tangent line is
+    pt1 = always_redraw(
       lambda: Dot(color=RED).move_to(
-        ax2.c2p(k.get_value(), deriv.underlying_function(k.get_value()))
+        ax1.c2p(k.get_value(), deriv1.underlying_function(k.get_value()))
       )
     )
 
-    # Animate everything
-    self.play(Create(ax1), Create(ax2)) # Create axes
-    self.play(Create(func)) # Draw the function
-    self.play(Create(tangent), Create(pt1), Create(pt2))
-    self.wait()
+    # Point showing where the 2rd tangent line is
+    pt2 = always_redraw(
+      lambda: Dot(color=RED).move_to(
+        ax2.c2p(k.get_value(), deriv2.underlying_function(k.get_value()))
+      )
+    )
+
+    # Point showing where the 4th tangent line is
+    pt3 = always_redraw(
+      lambda: Dot(color=RED).move_to(
+        ax3.c2p(k.get_value(), deriv3.underlying_function(k.get_value()))
+      )
+    )
+
+    # Point showing where the 4th derivative is
+    pt4 = always_redraw(
+      lambda: Dot(color=RED).move_to(
+        ax4.c2p(k.get_value(), deriv4.underlying_function(k.get_value()))
+      )
+    )
+
+    ## LABELS
+    # Labels for function
+    labels_func = ax0.get_axis_labels(
+      x_label='x', y_label='f(x)')
+
+    # Labels for first derivative
+    labels_deriv1 = always_redraw(
+      lambda: ax1.get_axis_labels(
+        x_label='x', y_label='f^{\prime}(x)')
+    )
+
+    # Labels for second derivative
+    labels_deriv2 = always_redraw(
+      lambda: ax2.get_axis_labels(
+        x_label='x', y_label='f^{\prime\prime}(x)')
+    )
+
+    # Labels for third derivative
+    labels_deriv3 = always_redraw(
+      lambda: ax3.get_axis_labels(
+        x_label='x', y_label='f^{\prime\prime\prime}(x)')
+    )
+
+    # Labels for fourth derivative
+    labels_deriv4 = always_redraw(
+      lambda: ax4.get_axis_labels(
+        x_label='x', y_label='f^{\prime\prime\prime\prime}(x)=f(x)')
+    )
+  
+    
+    ## TITLES
+    # Title for the function
+    title_func = always_redraw(
+      lambda: MathTex('\sin(x)').next_to(ax0, DOWN, buff=0.25)
+    )
+
+    # Title for the first derivative
+    title_deriv1 = always_redraw(
+      lambda: MathTex('\cos(x)').next_to(ax1, DOWN, buff=0.25)
+    )
+
+    # Title for the second derivative
+    title_deriv2 = always_redraw(
+      lambda: MathTex('-\sin(x)').next_to(ax2, DOWN, buff=0.25)
+    )
+
+    # Title for the third derivative
+    title_deriv3 = always_redraw(
+      lambda: MathTex('-\cos(x)').next_to(ax3, DOWN, buff=0.25)
+    )
+
+    # Title for the fourth derivative
+    title_deriv4 = always_redraw(
+      lambda: MathTex('\sin(x)').next_to(ax4, DOWN, buff=0.25)
+    )
+
+
+    ### ANIMATE
+    ## STEP 1
+    # Create axes and label them
     self.play(
-      Create(deriv),
-      k.animate.set_value(4),
-      run_time=5)
-    self.play(FadeOut(pt2))
+      Create(ax0),
+      Create(ax1),
+      Create(labels_func),
+      Create(labels_deriv1),
+      Create(title_func),
+      Create(title_deriv1)
+    )
+
+    # Draw the main function
+    self.play(Create(func))
+    # Create the tangent lines and the points
+    self.play(Create(tangent0), Create(pt0), Create(pt1))
+
+    # Draw the 1st derivative and move the tangent line
+    self.play(
+      Create(deriv1),
+      k.animate.set_value(x1),
+      run_time=4)
 
     # Make LHS disappear
-    self.play(FadeOut(ax1), FadeOut(pt1), FadeOut(func), FadeOut(tangent))
-    self.play(ax2.animate.to_edge(LEFT), deriv.animate.to_edge(LEFT))
+    self.play(
+      FadeOut(ax0),
+      FadeOut(pt0),
+      FadeOut(func),
+      FadeOut(tangent0),
+      FadeOut(labels_func),
+      FadeOut(title_func),
+      k.animate.set_value(x0)
+    )
+
+    # Create second tangent line
+    self.play(Create(tangent1))
+
+    # Move the first derivative to the left
+    self.play(
+      ax1.animate.to_edge(LEFT),
+      deriv1.animate.to_edge(LEFT).set_color(BLUE))
+
+    ## STEP 2
+    # Create the axes for second derivative and label them
+    self.play(
+      Create(ax2),
+      Create(labels_deriv2),
+      Create(title_deriv2)
+    )
+    # Create the point which will draw the second derivative
+    self.play(Create(pt2))
+
+    # Draw the second derivative
+    self.play(
+      k.animate.set_value(x1),
+      Create(deriv2),
+      run_time=4
+    )
+
+    # Make LHS disappear
+    self.play(
+      FadeOut(ax1),
+      FadeOut(pt1),
+      FadeOut(deriv1),
+      FadeOut(tangent1),
+      FadeOut(labels_deriv1),
+      FadeOut(title_deriv1),
+      k.animate.set_value(x0)
+    )
+
+    # Create second tangent line
+    self.play(Create(tangent2))
+
+    # Move the first derivative to the left
+    self.play(
+      ax2.animate.to_edge(LEFT),
+      deriv2.animate.to_edge(LEFT).set_color(BLUE))
+
+    ## PART 3
+    # Create the axes for second derivative and label them
+    self.play(
+      Create(ax3),
+      Create(labels_deriv3),
+      Create(title_deriv3)
+    )
+    # Create the point which will draw the second derivative
+    self.play(Create(pt3))
+
+    # Draw the second derivative
+    self.play(
+      k.animate.set_value(x1),
+      Create(deriv3),
+      run_time=4
+    )
+
+    # Make LHS disappear
+    self.play(
+      FadeOut(ax2),
+      FadeOut(pt2),
+      FadeOut(deriv2),
+      FadeOut(tangent2),
+      FadeOut(labels_deriv2),
+      FadeOut(title_deriv2),
+      k.animate.set_value(x0)
+    )
+
+    # Create second tangent line
+    self.play(Create(tangent3))
+
+    # Move the first derivative to the left
+    self.play(
+      ax3.animate.to_edge(LEFT),
+      deriv3.animate.to_edge(LEFT).set_color(BLUE))
+
+    ## PART 4
+    # Create the axes for fourth derivative and label them
+    self.play(
+      Create(ax4),
+      Create(labels_deriv4),
+      Create(title_deriv4)
+    )
+    # Create the point which will draw the fourth derivative
+    self.play(Create(pt4))
+
+    # Draw the fourth derivative
+    self.play(
+      k.animate.set_value(x1),
+      Create(deriv4),
+      run_time=4
+    )
+
+    self.wait() # Hold the animation to stop it looping so soon
 
     # Show that the sin derivatives are circular
-    
