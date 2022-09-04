@@ -403,25 +403,25 @@ class MapDerivatives(Scene):
       k.animate.set_value(x0)
     )
 
-    # Create second tangent line
+    # Create third tangent line
     self.play(Create(tangent2))
 
-    # Move the first derivative to the left
+    # Move the second derivative to the left
     self.play(
       ax2.animate.to_edge(LEFT),
       deriv2.animate.to_edge(LEFT).set_color(BLUE))
 
     ## PART 3
-    # Create the axes for second derivative and label them
+    # Create the axes for third derivative and label them
     self.play(
       Create(ax3),
       Create(labels_deriv3),
       Create(title_deriv3)
     )
-    # Create the point which will draw the second derivative
+    # Create the point which will draw the third derivative
     self.play(Create(pt3))
 
-    # Draw the second derivative
+    # Draw the third derivative
     self.play(
       k.animate.set_value(x1),
       Create(deriv3),
@@ -439,10 +439,10 @@ class MapDerivatives(Scene):
       k.animate.set_value(x0)
     )
 
-    # Create second tangent line
+    # Create fourth tangent line
     self.play(Create(tangent3))
 
-    # Move the first derivative to the left
+    # Move the third derivative to the left
     self.play(
       ax3.animate.to_edge(LEFT),
       deriv3.animate.to_edge(LEFT).set_color(BLUE))
@@ -463,6 +463,35 @@ class MapDerivatives(Scene):
       Create(deriv4),
       run_time=4
     )
+
+    ## RESET
+    labels_deriv5 = ax4.get_axis_labels(x_label='x', y_label='f(x)')
+    # transform labels_deriv4 into labels_deriv5
+
+    self.wait(3)
+
+    # Make LHS disappear
+    self.play(
+      FadeOut(ax3),
+      FadeOut(pt3),
+      FadeOut(deriv3),
+      FadeOut(tangent3),
+      FadeOut(labels_deriv3),
+      FadeOut(title_deriv3),
+      k.animate.set_value(x0)
+    )
+
+    # Move the fourth derivative to the left
+    self.play(
+      ax4.animate.to_edge(LEFT),
+      deriv4.animate.to_edge(LEFT).set_color(BLUE))
+
+    self.play(
+      Uncreate(ax4),
+      Uncreate(deriv4),
+      Uncreate(pt4),
+      Uncreate(labels_deriv4),
+      Uncreate(title_deriv4))
 
     self.wait() # Hold the animation to stop it looping so soon
 
