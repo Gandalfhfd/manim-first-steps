@@ -336,19 +336,16 @@ class MapDerivatives(Scene):
     ### ANIMATE
     ## STEP 1
     # Create axes and label them
+    self.add(ax0, labels_func, title_func, func, pt0)
+
     self.play(
-      Create(ax0),
       Create(ax1),
-      Create(labels_func),
       Create(labels_deriv1),
-      Create(title_func),
       Create(title_deriv1)
     )
 
-    # Draw the main function
-    self.play(Create(func))
     # Create the tangent lines and the points
-    self.play(Create(tangent0), Create(pt0), Create(pt1))
+    self.play(Create(tangent0), Create(pt1))
 
     # Draw the 1st derivative and move the tangent line
     self.play(
@@ -481,19 +478,15 @@ class MapDerivatives(Scene):
       k.animate.set_value(x0)
     )
 
+    # Change labels_deriv4 into labels_deriv5
+    self.play(Transform(labels_deriv4, labels_deriv5))
+    self.remove(labels_deriv4)
+
     # Move the fourth derivative to the left
     self.play(
       ax4.animate.to_edge(LEFT),
-      deriv4.animate.to_edge(LEFT).set_color(BLUE))
+      deriv4.animate.to_edge(LEFT).set_color(BLUE),
+      Transform(labels_deriv5, labels_func)
+      )
 
-    self.play(
-      Uncreate(ax4),
-      Uncreate(deriv4),
-      Uncreate(pt4),
-      Uncreate(labels_deriv4),
-      Uncreate(title_deriv4))
-
-    self.wait() # Hold the animation to stop it looping so soon
-
-    # Make perfect loop
     # Add label showing gradient of tangent and height of dot on RHS
