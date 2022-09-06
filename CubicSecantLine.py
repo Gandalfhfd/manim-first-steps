@@ -117,8 +117,19 @@ class Quadratic(Scene):
         )
     )
 
+    label = always_redraw(
+      lambda: Text('test').move_to(
+        ax.c2p(k.get_value()+dt.get_value(),
+          cubic_func.underlying_function(k.get_value()+dt.get_value())+0.2)
+      )
+    )
+
     self.play(Create(ax), Create(cubic_func))
-    self.play(Create(tangent), Create(pt1), Create(pt2))
+    self.play(Create(tangent),
+    Create(pt1),
+    Create(pt2),
+    Create(label))
+
     self.play(
       dt.animate.set_value(0.0001),
       k.animate.set_value(0),
