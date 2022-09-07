@@ -1,4 +1,4 @@
-from cmath import sin
+from math import sin, cos
 from manim import *
 
 class Testing(Scene):
@@ -332,16 +332,34 @@ class MapDerivatives(Scene):
       lambda: MathTex('\sin(x)').next_to(ax4, DOWN, buff=0.25)
     )
 
+    ## Labels which show derivative
+    x_var = Variable(x0, 'x')
 
+    # Absolute mess, but shows value of gradient
+    grad_lab = always_redraw(
+      lambda: Variable(
+        cos(x0),
+        MathTex(r'\frac{d(\sin(x))}{dx}'), # r shows this is raw text
+        num_decimal_places=3)
+        .move_to(
+          ax0.c2p(k.get_value(),
+            func.underlying_function(k.get_value())))
+    )
+
+    grad_lab.add_updater(
+      lambda v: v.tracker.set_value(cos(x_var.tracker.get_value()))
+    )
+
+    
     ### ANIMATE
     ## STEP 1
     # Create axes and label them
-    self.add(ax0, labels_func, title_func, func, pt0)
+    self.add(ax0, labels_func, title_func, func, pt0, grad_lab)
 
     self.play(
       Create(ax1),
       Create(labels_deriv1),
-      Create(title_deriv1)
+      Create(title_deriv1),
     )
 
     # Create the tangent lines and the points
@@ -351,6 +369,7 @@ class MapDerivatives(Scene):
     self.play(
       Create(deriv1),
       k.animate.set_value(x1),
+      x_var.tracker.animate.set_value(x1),
       run_time=4)
 
     # Make LHS disappear
@@ -361,7 +380,8 @@ class MapDerivatives(Scene):
       FadeOut(tangent0),
       FadeOut(labels_func),
       FadeOut(title_func),
-      k.animate.set_value(x0)
+      k.animate.set_value(x0),
+      Uncreate(grad_lab)
     )
 
     # Create second tangent line
