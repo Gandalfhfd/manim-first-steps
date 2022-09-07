@@ -8,14 +8,19 @@ class TextChange(Scene):
 
     x_var = Variable(x0, 'x')
 
-    grad_lab = Variable(
-      cos(x0),
-      MathTex(r'\frac{d(\sin(x))}{dx}'), # r shows this is raw text
-      num_decimal_places=3)
+    grad_lab = always_redraw(
+      lambda: Variable(
+        cos(x0),
+        MathTex(r'\frac{d(\sin(x))}{dx}'), # r shows this is raw text
+        num_decimal_places=3).scale(0.5).to_edge(DOWN, buff=0.25)
+    )
+
 
     grad_lab.add_updater(
       lambda v: v.tracker.set_value(cos(x_var.tracker.get_value()))
     )
+
+    grad_lab.scale(0.5)
 
     self.add(grad_lab)
     self.play(
