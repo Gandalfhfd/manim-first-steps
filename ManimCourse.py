@@ -137,43 +137,54 @@ class MapDerivatives(Scene):
 
 
     ## AXES
-    # Cartesian coordinate axes, DO NOT USE 3 ARGUMENTS IN x_range
+    # Cartesian coordinate axes, final argument in x_range must divide the range
+    # evenly
     ax0 = (
-      Axes(x_range=[x0,x1], y_range=[-1,1,0.5], x_length=6, y_length=6)
+      Axes(x_range=[x0,x1,(x1-x0)/4],
+        y_range=[-1,1,0.5],
+        x_length=6,
+        y_length=6)
       .to_edge(LEFT)
-      # .add_coordinates()
       .set_color(WHITE)
     )
 
     # Cartesian coordinate axes
     ax1 = (
-      Axes(x_range=[x0,x1], y_range=[-1,1,0.5], x_length=6, y_length=6)
+      Axes(x_range=[x0,x1,(x1-x0)/4],
+        y_range=[-1,1,0.5],
+        x_length=6,
+        y_length=6)
       .to_edge(RIGHT)
-      # .add_coordinates()
       .set_color(WHITE)
     )
 
     # Cartesian coordinate axes
     ax2 = (
-      Axes(x_range=[x0,x1], y_range=[-1,1,0.5], x_length=6, y_length=6)
+      Axes(x_range=[x0,x1,(x1-x0)/4],
+        y_range=[-1,1,0.5],
+        x_length=6,
+        y_length=6)
       .to_edge(RIGHT)
-      # .add_coordinates()
       .set_color(WHITE)
     )
 
     # Cartesian coordinate axes
     ax3 = (
-      Axes(x_range=[x0,x1], y_range=[-1,1,0.5], x_length=6, y_length=6)
+      Axes(x_range=[x0,x1,(x1-x0)/4],
+        y_range=[-1,1,0.5],
+        x_length=6,
+        y_length=6)
       .to_edge(RIGHT)
-      # .add_coordinates()
       .set_color(WHITE)
     )
 
     # Cartesian coordinate axes
     ax4 = (
-      Axes(x_range=[x0,x1], y_range=[-1,1,0.5], x_length=6, y_length=6)
+      Axes(x_range=[x0,x1,(x1-x0)/4],
+        y_range=[-1,1,0.5],
+        x_length=6,
+        y_length=6)
       .to_edge(RIGHT)
-      # .add_coordinates()
       .set_color(WHITE)
     )
 

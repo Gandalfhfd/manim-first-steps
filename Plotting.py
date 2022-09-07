@@ -10,7 +10,7 @@ class Plot(Scene):
     k = ValueTracker(-PI)
 
     ax1 = (
-      Axes(x_range=[x0,x1], y_range=[-1,1,0.5], x_length=6, y_length=6)
+      Axes(x_range=[x0,x1, x1/2], y_range=[-1,1,0.5], x_length=6, y_length=6)
       .to_edge(RIGHT)
       # .add_coordinates()
       .set_color(WHITE)
