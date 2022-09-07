@@ -333,33 +333,75 @@ class MapDerivatives(Scene):
     )
 
     ## Labels which show derivative
+    # works like a value tracker
     x_var = Variable(x0, 'x')
-
-    # Absolute mess, but shows value of gradient
-    grad_lab = always_redraw(
-      lambda: Variable(
+    
+    # Label showing gradient of function
+    grad_lab0 = (
+      Variable(
         cos(x0),
-        MathTex(r'\frac{d(\sin(x))}{dx}'), # r shows this is raw text
+        MathTex(r'\frac{d(\sin(x))}{dx}=\cos(x)'), # r shows this is raw text
         num_decimal_places=3)
-        .move_to(
-          ax0.c2p(k.get_value(),
-            func.underlying_function(k.get_value())))
+        .to_edge(UP, buff=0)
+        .scale(0.7)
     )
 
-    grad_lab.add_updater(
+    grad_lab0.add_updater(
       lambda v: v.tracker.set_value(cos(x_var.tracker.get_value()))
     )
 
+    # Label showing gradient of first derivative
+    grad_lab1 = (
+      Variable(
+        -sin(x0),
+        MathTex(r'\frac{d(\cos(x))}{dx}=-\sin(x)'), # r shows this is raw text
+        num_decimal_places=3)
+        .to_edge(UP, buff=0)
+        .scale(0.7)
+    )
+
+    grad_lab1.add_updater(
+      lambda v: v.tracker.set_value(-sin(x_var.tracker.get_value()))
+    )
     
+    # Label showing gradient of second derivative
+    grad_lab2 = (
+      Variable(
+        -cos(x0),
+        MathTex(r'\frac{d(-\sin(x))}{dx}=-\cos(x)'), # r shows this is raw text
+        num_decimal_places=3)
+        .to_edge(UP, buff=0)
+        .scale(0.7)
+    )
+
+    grad_lab2.add_updater(
+      lambda v: v.tracker.set_value(-cos(x_var.tracker.get_value()))
+    )
+
+    # Label showing gradient of third derivative
+    grad_lab3 = (
+      Variable(
+        sin(x0),
+        MathTex(r'\frac{d(-\cos(x))}{dx}=\sin(x)'), # r shows this is raw text
+        num_decimal_places=3)
+        .to_edge(UP, buff=0)
+        .scale(0.7)
+    )
+
+    grad_lab3.add_updater(
+      lambda v: v.tracker.set_value(sin(x_var.tracker.get_value()))
+    )
+
     ### ANIMATE
     ## STEP 1
     # Create axes and label them
-    self.add(ax0, labels_func, title_func, func, pt0, grad_lab)
+    self.add(ax0, labels_func, title_func, func, pt0)
 
     self.play(
       Create(ax1),
-      Create(labels_deriv1),
-      Create(title_deriv1),
+      Write(labels_deriv1),
+      Write(title_deriv1),
+      Write(grad_lab0)
     )
 
     # Create the tangent lines and the points
@@ -380,9 +422,12 @@ class MapDerivatives(Scene):
       FadeOut(tangent0),
       FadeOut(labels_func),
       FadeOut(title_func),
+      FadeOut(grad_lab0),
       k.animate.set_value(x0),
-      Uncreate(grad_lab)
     )
+
+    # Reset x_var
+    x_var.tracker.set_value(x0)
 
     # Create second tangent line
     self.play(Create(tangent1))
@@ -396,15 +441,18 @@ class MapDerivatives(Scene):
     # Create the axes for second derivative and label them
     self.play(
       Create(ax2),
-      Create(labels_deriv2),
-      Create(title_deriv2)
+      Write(labels_deriv2),
+      Write(title_deriv2),
+      Write(grad_lab1)
     )
+
     # Create the point which will draw the second derivative
     self.play(Create(pt2))
 
     # Draw the second derivative
     self.play(
       k.animate.set_value(x1),
+      x_var.tracker.animate.set_value(x1),
       Create(deriv2),
       run_time=4
     )
@@ -417,8 +465,12 @@ class MapDerivatives(Scene):
       FadeOut(tangent1),
       FadeOut(labels_deriv1),
       FadeOut(title_deriv1),
+      FadeOut(grad_lab1),
       k.animate.set_value(x0)
     )
+
+    # Reset x_var
+    x_var.tracker.set_value(x0)
 
     # Create third tangent line
     self.play(Create(tangent2))
@@ -432,15 +484,18 @@ class MapDerivatives(Scene):
     # Create the axes for third derivative and label them
     self.play(
       Create(ax3),
-      Create(labels_deriv3),
-      Create(title_deriv3)
+      Write(labels_deriv3),
+      Write(title_deriv3),
+      Write(grad_lab2)
     )
+
     # Create the point which will draw the third derivative
     self.play(Create(pt3))
 
     # Draw the third derivative
     self.play(
       k.animate.set_value(x1),
+      x_var.tracker.animate.set_value(x1),
       Create(deriv3),
       run_time=4
     )
@@ -453,8 +508,12 @@ class MapDerivatives(Scene):
       FadeOut(tangent2),
       FadeOut(labels_deriv2),
       FadeOut(title_deriv2),
+      FadeOut(grad_lab2),
       k.animate.set_value(x0)
     )
+
+    # Reset x_var
+    x_var.tracker.set_value(x0)
 
     # Create fourth tangent line
     self.play(Create(tangent3))
@@ -468,15 +527,18 @@ class MapDerivatives(Scene):
     # Create the axes for fourth derivative and label them
     self.play(
       Create(ax4),
-      Create(labels_deriv4),
-      Create(title_deriv4)
+      Write(labels_deriv4),
+      Write(title_deriv4),
+      Write(grad_lab3)
     )
+
     # Create the point which will draw the fourth derivative
     self.play(Create(pt4))
 
     # Draw the fourth derivative
     self.play(
       k.animate.set_value(x1),
+      x_var.tracker.animate.set_value(x1),
       Create(deriv4),
       run_time=4
     )
@@ -495,6 +557,7 @@ class MapDerivatives(Scene):
       FadeOut(tangent3),
       FadeOut(labels_deriv3),
       FadeOut(title_deriv3),
+      FadeOut(grad_lab3),
       k.animate.set_value(x0)
     )
 
@@ -508,5 +571,3 @@ class MapDerivatives(Scene):
       deriv4.animate.to_edge(LEFT).set_color(BLUE),
       Transform(labels_deriv5, labels_func)
       )
-
-    # Add label showing gradient of tangent and height of dot on RHS
